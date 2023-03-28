@@ -7,11 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Scout compare
-        id: scout
-        uses: eunomie/scout-action@v0.0.2
+        id: compare
+        uses: eunomie/scout-action@v0.0.3
         with:
           token: ${{ secrets.PAT }}
           command: compare
+          debug: true
           image: golang:1.20.2-alpine
           toImg: golang:1.19.4-alpine3.16
 
@@ -19,4 +20,19 @@ jobs:
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.scout.outputs.compare }}
+          body: ${{ steps.compare.outputs.compare }}
+
+      - name: Scout Quickview
+        id: quickview
+        uses: eunomie/scout-action@v0.0.3
+        with:
+          token: ${{ secrets.PAT }}
+          command: quickview
+          debug: true
+          image: golang:1.20.2-alpine
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.quickview.outputs.quickview }}
