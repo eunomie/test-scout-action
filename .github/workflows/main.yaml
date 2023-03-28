@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Scout SBOM
-        uses: eunomie/scout-action@v0.0.4
+        uses: eunomie/scout-action@v0.0.5
         with:
           token: ${{ secrets.PAT }}
           command: sbom
@@ -15,7 +15,7 @@ jobs:
           image: golang:1.20.2-alpine
 
       - name: Scout SBOM
-        uses: eunomie/scout-action@v0.0.4
+        uses: eunomie/scout-action@v0.0.5
         with:
           token: ${{ secrets.PAT }}
           command: sbom
@@ -24,7 +24,7 @@ jobs:
 
       - name: Scout Quickview
         id: quickview
-        uses: eunomie/scout-action@v0.0.4
+        uses: eunomie/scout-action@v0.0.5
         with:
           token: ${{ secrets.PAT }}
           command: quickview
@@ -36,9 +36,11 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.quickview.outputs.quickview }}
+          token: ${{ secrets.GH_TOKEN }}
+
       - name: Scout compare
         id: compare
-        uses: eunomie/scout-action@v0.0.4
+        uses: eunomie/scout-action@v0.0.5
         with:
           token: ${{ secrets.PAT }}
           command: compare
@@ -51,3 +53,4 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.compare.outputs.compare }}
+          token: ${{ secrets.GH_TOKEN }}
