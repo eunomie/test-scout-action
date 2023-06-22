@@ -7,26 +7,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Scout SBOM
-        uses: eunomie/scout-action@v0.0.5
+        uses: docker/scout-action@main
         with:
-          token: ${{ secrets.PAT }}
+          dockerhub-user: ${{ secrets.DOCKER_USER }}
+          dockerhub-password: ${{ secrets.DOCKER_PAT }}
           command: sbom
           debug: true
           image: golang:1.20.2-alpine
 
       - name: Scout SBOM
-        uses: eunomie/scout-action@v0.0.5
+        uses: docker/scout-action@main
         with:
-          token: ${{ secrets.PAT }}
+          dockerhub-user: ${{ secrets.DOCKER_USER }}
+          dockerhub-password: ${{ secrets.DOCKER_PAT }}
           command: sbom
           debug: true
           image: golang:1.19.4-alpine3.16
 
       - name: Scout Quickview
         id: quickview
-        uses: eunomie/scout-action@v0.0.5
+        uses: docker/scout-action@main
         with:
-          token: ${{ secrets.PAT }}
+          dockerhub-user: ${{ secrets.DOCKER_USER }}
+          dockerhub-password: ${{ secrets.DOCKER_PAT }}
           command: quickview
           debug: true
           image: golang:1.20.2-alpine
@@ -40,9 +43,10 @@ jobs:
 
       - name: Scout compare
         id: compare
-        uses: eunomie/scout-action@v0.0.5
+        uses: docker/scout-action@main
         with:
-          token: ${{ secrets.PAT }}
+          dockerhub-user: ${{ secrets.DOCKER_USER }}
+          dockerhub-password: ${{ secrets.DOCKER_PAT }}
           command: compare
           debug: true
           image: golang:1.20.2-alpine
