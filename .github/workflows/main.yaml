@@ -11,19 +11,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
-      - name: Scout SBOM
-        uses: eunomie/scout-action@main
-        with:
-          command: sbom
-          debug: true
-          image: golang:1.20.2-alpine
-
-      - name: Scout SBOM
-        uses: eunomie/scout-action@main
-        with:
-          command: sbom
-          debug: true
-          image: golang:1.19.4-alpine3.16
 
       - name: Scout Quickview
         id: quickview
@@ -32,13 +19,9 @@ jobs:
           command: quickview
           debug: true
           image: golang:1.20.2-alpine
-
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.quickview.outputs.quickview }}
-          token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          write-comment: true
+          delete-previous-comments: true
 
       - name: Scout compare
         id: compare
@@ -48,10 +31,6 @@ jobs:
           debug: true
           image: golang:1.20.2-alpine
           to: golang:1.19.4-alpine3.16
-
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.compare.outputs.compare }}
-          token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          write-comment: true
+          delete-previous-comments: true
