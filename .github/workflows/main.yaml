@@ -54,6 +54,15 @@ jobs:
           write-comment: true
           keep-previous-comments: true
           
+      - name: qv
+        id: qv
+        uses: eunomie/scout-action@main
+        with:
+          debug: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          command: quickview
+          image: golang:1.20.2-alpine
+          
       - name: Compare
         id: compare
         uses: eunomie/scout-action@main
