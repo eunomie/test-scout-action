@@ -4,6 +4,7 @@ on:
 
 jobs:
   scout:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
