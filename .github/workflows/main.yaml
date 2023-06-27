@@ -49,8 +49,6 @@ jobs:
         with:
           command: quickview
           debug: true
-          image: ""
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           write-comment: true
           keep-previous-comments: true
           
@@ -59,7 +57,6 @@ jobs:
         uses: eunomie/scout-action@main
         with:
           debug: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           command: quickview
           image: golang:1.20.2-alpine
           
@@ -68,8 +65,6 @@ jobs:
         uses: eunomie/scout-action@main
         with:
           debug: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           command: compare
           image: golang:1.20.2-alpine
           to: golang:1.19.4-alpine3.16
-          exit-code: false
