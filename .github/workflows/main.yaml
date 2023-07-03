@@ -55,6 +55,8 @@ jobs:
 
       - uses: eunomie/scout-action@main
         with:
-          command: cves
+          command: quickview,cves
           image: neo4j@sha256:ff8fdd8fa41b61631246e4e52de9f43a83a53b816d8c369212ba28a8c64f81e6
+          ignore-base: true
+          only-package-types: maven
           exit-code: false
