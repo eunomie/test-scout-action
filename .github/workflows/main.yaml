@@ -53,7 +53,7 @@ jobs:
 
       - uses: eunomie/scout-action@main
         with:
-         command: cves
+          command: cves
           image:  neo4j@sha256:ff8fdd8fa41b61631246e4e52de9f43a83a53b816d8c369212ba28a8c64f81e6
 
       - uses: eunomie/scout-action@main
