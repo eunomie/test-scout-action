@@ -35,7 +35,7 @@ jobs:
 
       - uses: eunomie/scout-action@main
         with:
-          command: cves
+          command: quickview,cves
           
       #- uses: eunomie/scout-action@main
       #  with:
