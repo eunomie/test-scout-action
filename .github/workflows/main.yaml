@@ -37,19 +37,19 @@ jobs:
         with:
           command: quickview
           image: ${{ steps.meta.outputs.tags }}
-      
-      - uses: eunomie/scout-action@main
-        with:
-          command: stream
-          image: ${{ steps.meta.outputs.tags }}
-          stream: test-stream
-      
+            
       - uses: eunomie/scout-action@main
         with:
           command: compare
           image: ${{ steps.meta.outputs.tags }}
           to-stream: test-stream
-          
+
+      - uses: eunomie/scout-action@main
+        with:
+          command: stream
+          image: ${{ steps.meta.outputs.tags }}
+          stream: test-stream
+
       #- uses: eunomie/scout-action@main
       #  with:
       #    github-token: ${{ secrets.GITHUB_TOKEN }}
