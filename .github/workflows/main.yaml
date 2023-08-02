@@ -46,6 +46,7 @@ jobs:
       - uses: eunomie/scout-action@main
         with:
           command: compare
+          image: ${{ steps.meta.outputs.tags }}
           to-stream: test-stream
           
       #- uses: eunomie/scout-action@main
