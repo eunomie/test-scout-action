@@ -14,7 +14,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4.4.0
         with:
-          images: eunomie/test-scout-action
+          images: yvesbrissaud/test-scout-action
           labels: org.opencontainers.image.revision=${{ env.SHA }}
           tags: latest
 
