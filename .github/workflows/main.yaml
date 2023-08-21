@@ -42,7 +42,7 @@ jobs:
         with:
           command: compare
           image: ${{ steps.meta.outputs.tags }}
-          to-latest: true
+          to-env: staging
 
       - uses: eunomie/scout-action@main
         with:
