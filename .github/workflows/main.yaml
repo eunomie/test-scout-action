@@ -48,7 +48,7 @@ jobs:
         with:
           command: environment
           image: ${{ steps.meta.outputs.tags }}
-          stream: staging
+          environment: staging
 
       #- uses: eunomie/scout-action@main
       #  with:
