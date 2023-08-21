@@ -42,13 +42,13 @@ jobs:
         with:
           command: compare
           image: ${{ steps.meta.outputs.tags }}
-          to-stream: test-stream
+          to-latest: true
 
       - uses: eunomie/scout-action@main
         with:
-          command: stream
+          command: environment
           image: ${{ steps.meta.outputs.tags }}
-          stream: test-stream
+          stream: staging
 
       #- uses: eunomie/scout-action@main
       #  with:
