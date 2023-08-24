@@ -6,55 +6,79 @@ jobs:
   scout:
     runs-on: ubuntu-latest
     steps:
-      - name: Scout SBOM
-        uses: docker/scout-action@main
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v2.5.0
+      - name: Hub Login
+        uses: docker/login-action@v2
         with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
-          command: sbom
-          debug: true
-          image: golang:1.20.2-alpine
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PAT }}
 
-      - name: Scout SBOM
-        uses: docker/scout-action@main
+      - name: Extract Docker metadata
+        id: meta-with
+        uses: docker/metadata-action@v4.4.0
         with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
-          command: sbom
-          debug: true
-          image: golang:1.19.4-alpine3.16
+          images: yvesbrissaud/demo-provenance
+          labels: org.opencontainers.image.revision=${{ env.SHA }}
+          tags: with
 
-      - name: Scout Quickview
-        id: quickview
-        uses: docker/scout-action@main
-        with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
-          command: quickview
-          debug: true
-          image: golang:1.20.2-alpine
+#      - name: Docker Build
+#        uses: docker/build-push-action@v4.0.0
+#        with:
+#          context: .
+#          push: true
+#          load: false
+#          tags: ${{ steps.meta-with.outputs.tags }}
+#          labels: ${{ steps.meta-with.outputs.labels }}
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=max
+#          build-args: |
+#            key:with
+#
+#      - name: Extract Docker metadata
+#        id: meta-without
+#        uses: docker/metadata-action@v4.4.0
+#        with:
+#          images: yvesbrissaud/demo-provenance
+#          labels: org.opencontainers.image.revision=${{ env.SHA }}
+#          tags: without
+#
+#      - name: Docker Build
+#        uses: docker/build-push-action@v4.0.0
+#        with:
+#          context: .
+#          push: true
+#          load: false
+#          tags: ${{ steps.meta-without.outputs.tags }}
+#          labels: ${{ steps.meta-without.outputs.labels }}
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=max
+#          sbom: false
+#          provenance: false
+#          build-args: |
+#            key:without
 
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
+      - name: Extract Docker metadata
+        id: meta-with-min
+        uses: docker/metadata-action@v4.4.0
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.quickview.outputs.quickview }}
-          token: ${{ secrets.GH_TOKEN }}
+          images: yvesbrissaud/demo-provenance
+          labels: org.opencontainers.image.revision=${{ env.SHA }}
+          tags: with-min
 
-      - name: Scout compare
-        id: compare
-        uses: docker/scout-action@main
+      - name: Docker Build
+        uses: docker/build-push-action@v4.0.0
         with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
-          command: compare
-          debug: true
-          image: golang:1.20.2-alpine
-          to: golang:1.19.4-alpine3.16
-
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.compare.outputs.compare }}
-          token: ${{ secrets.GH_TOKEN }}
+          context: .
+          push: true
+          load: false
+          tags: ${{ steps.meta-with-min.outputs.tags }}
+          labels: ${{ steps.meta-with-min.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          sbom: true
+          provenance: mode=min
+          build-args: |
+            key:with-min
