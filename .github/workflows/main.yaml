@@ -32,6 +32,8 @@ jobs:
           load: false
           tags: ${{ steps.meta-with.outputs.tags }}
           labels: ${{ steps.meta-with.outputs.labels }}
+          sbom: true
+          provenance: mode=max
           build-args: |
             key:with
 
