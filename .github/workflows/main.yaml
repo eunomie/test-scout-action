@@ -32,8 +32,6 @@ jobs:
           load: false
           tags: ${{ steps.meta-with.outputs.tags }}
           labels: ${{ steps.meta-with.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           build-args: |
             key:with
 
@@ -53,8 +51,6 @@ jobs:
           load: false
           tags: ${{ steps.meta-without.outputs.tags }}
           labels: ${{ steps.meta-without.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           sbom: false
           provenance: false
           build-args: |
@@ -76,8 +72,6 @@ jobs:
           load: false
           tags: ${{ steps.meta-with-min.outputs.tags }}
           labels: ${{ steps.meta-with-min.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           sbom: true
           provenance: mode=min
           build-args: |
