@@ -9,7 +9,7 @@ RUN npm install left-pad
 
 ARG key
 
-ENV PROVKEY=$key
+ENV PROV_KEY=$key
 
 COPY <<EOF /usr/app/code.js
 const leftPad = require('left-pad')

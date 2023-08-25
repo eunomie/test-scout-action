@@ -24,41 +24,41 @@ jobs:
           labels: org.opencontainers.image.revision=${{ env.SHA }}
           tags: with
 
-#      - name: Docker Build
-#        uses: docker/build-push-action@v4.0.0
-#        with:
-#          context: .
-#          push: true
-#          load: false
-#          tags: ${{ steps.meta-with.outputs.tags }}
-#          labels: ${{ steps.meta-with.outputs.labels }}
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
-#          build-args: |
-#            key:with
-#
-#      - name: Extract Docker metadata
-#        id: meta-without
-#        uses: docker/metadata-action@v4.4.0
-#        with:
-#          images: yvesbrissaud/demo-provenance
-#          labels: org.opencontainers.image.revision=${{ env.SHA }}
-#          tags: without
-#
-#      - name: Docker Build
-#        uses: docker/build-push-action@v4.0.0
-#        with:
-#          context: .
-#          push: true
-#          load: false
-#          tags: ${{ steps.meta-without.outputs.tags }}
-#          labels: ${{ steps.meta-without.outputs.labels }}
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
-#          sbom: false
-#          provenance: false
-#          build-args: |
-#            key:without
+      - name: Docker Build
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          push: true
+          load: false
+          tags: ${{ steps.meta-with.outputs.tags }}
+          labels: ${{ steps.meta-with.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            key:with
+
+      - name: Extract Docker metadata
+        id: meta-without
+        uses: docker/metadata-action@v4.4.0
+        with:
+          images: yvesbrissaud/demo-provenance
+          labels: org.opencontainers.image.revision=${{ env.SHA }}
+          tags: without
+
+      - name: Docker Build
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          push: true
+          load: false
+          tags: ${{ steps.meta-without.outputs.tags }}
+          labels: ${{ steps.meta-without.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          sbom: false
+          provenance: false
+          build-args: |
+            key:without
 
       - name: Extract Docker metadata
         id: meta-with-min
