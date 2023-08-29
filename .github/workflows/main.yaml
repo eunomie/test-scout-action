@@ -35,27 +35,28 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Scout Quickview
-        uses: eunomie/scout-action@main
-        id: quickview
-        with:
-          command: quickview
-          image: ${{ steps.meta.outputs.tags }}
+      #- name: Scout Quickview
+      #  uses: eunomie/scout-action@main
+      #  id: quickview
+      #  with:
+      #    command: quickview
+      #    image: ${{ steps.meta.outputs.tags }}
             
       - name: Scout Compare
-        uses: eunomie/scout-action@main
+        #uses: eunomie/scout-action@main
+        uses: docker/scout-action@v0.32.2
         with:
           command: compare
           image: ${{ steps.meta.outputs.tags }}
           to-env: staging
           debug: true
 
-      - name: Scout Environment
-        uses: eunomie/scout-action@main
-        with:
-          command: environment
-          image: ${{ steps.meta.outputs.tags }}
-          environment: staging
+      #- name: Scout Environment
+      #  uses: eunomie/scout-action@main
+      #  with:
+      #    command: environment
+      #    image: ${{ steps.meta.outputs.tags }}
+      #    environment: staging
 
       #- uses: eunomie/scout-action@main
       #  with:
