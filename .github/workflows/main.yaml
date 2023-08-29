@@ -44,7 +44,7 @@ jobs:
             
       - name: Scout Compare
         #uses: eunomie/scout-action@main
-        uses: docker/scout-action@v0.32.2
+        uses: eunomie/scout-action@main
         with:
           command: compare
           image: ${{ steps.meta.outputs.tags }}
