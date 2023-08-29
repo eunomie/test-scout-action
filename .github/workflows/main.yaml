@@ -49,6 +49,7 @@ jobs:
           command: compare
           image: ${{ steps.meta.outputs.tags }}
           to-env: staging
+          organization: yvesbrissaud
           debug: true
 
       #- name: Scout Environment
