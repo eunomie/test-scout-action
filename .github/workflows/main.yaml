@@ -39,7 +39,7 @@ jobs:
         uses: eunomie/scout-action@main
         id: quickview
         with:
-          command: quickview
+          command: quickview,cves,recommendations
           image: ${{ steps.meta.outputs.tags }}
           organization: yvesbrissaud
             
