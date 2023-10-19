@@ -46,7 +46,7 @@ jobs:
         #uses: eunomie/scout-action@main
         uses: eunomie/scout-action@main
         with:
-          command: compare
+          command: quickview,cves,recommendations,compare
           image: ${{ steps.meta.outputs.tags }}
           to-env: staging
           organization: yvesbrissaud
