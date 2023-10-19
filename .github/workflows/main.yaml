@@ -35,22 +35,22 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      #- name: Scout Quickview
-      #  uses: eunomie/scout-action@main
-      #  id: quickview
-      #  with:
-      #    command: quickview
-      #    image: ${{ steps.meta.outputs.tags }}
+      - name: Scout View
+        uses: eunomie/scout-action@main
+        id: quickview
+        with:
+          command: quickview
+          image: ${{ steps.meta.outputs.tags }}
+          organization: yvesbrissaud
             
       - name: Scout Compare
         #uses: eunomie/scout-action@main
         uses: eunomie/scout-action@main
         with:
-          command: quickview,cves,recommendations,compare
+          command: compare
           image: ${{ steps.meta.outputs.tags }}
           to-env: staging
           organization: yvesbrissaud
-          debug: true
 
       #- name: Scout Environment
       #  uses: eunomie/scout-action@main
