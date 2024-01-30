@@ -4,57 +4,100 @@ on:
 
 jobs:
   scout:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
-      - name: Scout SBOM
-        uses: docker/scout-action@main
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2.5.0
+        
+      - name: Hub Login
+        uses: docker/login-action@v2
         with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
-          command: sbom
-          debug: true
-          image: golang:1.20.2-alpine
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PAT }}
 
-      - name: Scout SBOM
-        uses: docker/scout-action@main
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4.4.0
         with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
-          command: sbom
-          debug: true
-          image: golang:1.19.4-alpine3.16
+          images: yvesbrissaud/test-scout-action
+          labels: org.opencontainers.image.revision=${{ env.SHA }}
+          tags: latest
 
-      - name: Scout Quickview
-        id: quickview
-        uses: docker/scout-action@main
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build
+        uses: docker/build-push-action@v5
         with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
+          context: https://github.com/docker/scout-demo-service.git
+          push: false
+          tags: docker/scout:demo-service
+          load: true
+
+      - name: TEST quickview no image
+        uses: eunomie/scout-action@main
+        with:
           command: quickview
-          debug: true
-          image: golang:1.20.2-alpine
 
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
+      - name: Docker Build
+        uses: docker/build-push-action@v4.0.0
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.quickview.outputs.quickview }}
-          token: ${{ secrets.GH_TOKEN }}
+          context: .
+          push: false
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Scout compare
-        id: compare
-        uses: docker/scout-action@main
+      - name: Scout View
+        uses: eunomie/scout-action@main
+        id: quickview
         with:
-          dockerhub-user: ${{ secrets.DOCKER_USER }}
-          dockerhub-password: ${{ secrets.DOCKER_PAT }}
+          command: quickview,cves,recommendations
+          image: ${{ steps.meta.outputs.tags }}
+          organization: yvesbrissaud
+            
+      - name: Scout Compare
+        #uses: eunomie/scout-action@main
+        uses: eunomie/scout-action@main
+        with:
           command: compare
-          debug: true
-          image: golang:1.20.2-alpine
-          to: golang:1.19.4-alpine3.16
+          image: ${{ steps.meta.outputs.tags }}
+          to-env: staging
+          organization: yvesbrissaud
 
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.compare.outputs.compare }}
-          token: ${{ secrets.GH_TOKEN }}
+      #- name: Scout Environment
+      #  uses: eunomie/scout-action@main
+      #  with:
+      #    command: environment
+      #    image: ${{ steps.meta.outputs.tags }}
+      #    environment: staging
+
+      #- uses: eunomie/scout-action@main
+      #  with:
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
+      #    command: quickview
+      #    image: golang:1.20.2-alpine
+          
+      #- uses: eunomie/scout-action@main
+      #  with:
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
+      #    command: quickview,compare
+      #    image: golang:1.20.2-alpine
+      #    to: golang:1.19.4-alpine3.16
+      #    exit-code: false
+
+      #- uses: docker/scout-action@main
+      #  with:
+      #    command: cves
+      #    image:  neo4j@sha256:ff8fdd8fa41b61631246e4e52de9f43a83a53b816d8c369212ba28a8c64f81e6
+
+      #- uses: docker/scout-action@main
+      #  with:
+      #    command: cves
+      #    image: yvesbrissaud/learn:1.0.1
