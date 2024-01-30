@@ -24,6 +24,25 @@ jobs:
           labels: org.opencontainers.image.revision=${{ env.SHA }}
           tags: latest
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build
+        uses: docker/build-push-action@v5
+        with:
+          context: https://github.com/docker/scout-demo-service.git
+          push: false
+          tags: docker/scout:demo-service
+          load: true
+
+      - name: TEST quickview no image
+        uses: eunomie/scout-action@main
+        with:
+          command: quickview
+
       - name: Docker Build
         uses: docker/build-push-action@v4.0.0
         with:
