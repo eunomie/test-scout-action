@@ -11,10 +11,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
-
       - name: Scout quickview
         id: quickview
         uses: docker/scout-action@v1
         with:
           command: quickview
           image: golang:1.19.4-alpine3.16
+          write-comment: false
